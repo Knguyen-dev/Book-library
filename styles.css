@@ -59,6 +59,10 @@ input[type="submit"] {
   letter-spacing: var(--spacing);
 }
 
+.content-hidden {
+  display: none;
+}
+
 header {
   background-color: var(--clr-grey-10);
   padding: 1.5rem 2rem;
@@ -87,12 +91,10 @@ header {
   position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  display: none;
 }
 
 /* Book form modal styling */
 .form-modal {
-  display: none;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -127,16 +129,19 @@ header {
 .book-form input:focus {
   outline: 1px solid black;
 }
-input[type="submit"] {
+input[type="submit"],
+.form-exit-btn {
   background-color: var(--clr-white);
   border: 2px solid var(--clr-black);
   padding: 0.5rem 0;
   border-radius: 0;
 }
-input[type="submit"]:hover {
+input[type="submit"]:hover,
+.form-exit-btn:hover {
   background-color: lemonchiffon;
 }
-input[type="submit"]:focus {
+input[type="submit"]:focus,
+.form-exit-btn:focus {
   background-color: yellowgreen;
 }
 
@@ -171,7 +176,6 @@ input[type="submit"]:focus {
 
 label {
   font-family: var(--ff-primary);
-  letter-spacing: var(--spacing);
 }
 #select-genre {
   padding: 0.5rem 0.2rem;
@@ -185,7 +189,6 @@ label {
 .book-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  background: green;
   font-family: var(--ff-primary);
   width: 80%;
   gap: 3rem;
@@ -199,7 +202,7 @@ label {
   justify-content: flex-start;
   padding: 1rem 1.5rem;
   gap: 0.8rem;
-  background-color: hsl(205, 63%, 48%);
+  background-color: var(--clr-primary-9);
   align-items: center;
 }
 .book-info {

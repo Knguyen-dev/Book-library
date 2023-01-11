@@ -15,10 +15,10 @@
       </section>
 
       <section class="library-info">
-        <p>Amount books:</p>
-        <p>Books read:</p>
-        <p>Books unread:</p>
-        <p>Num Genres:</p>
+        <p>Amount books: <span id="num-books">0</span></p>
+        <p>Books read: <span id="num-read">0</span></p>
+        <p>Books unread: <span id="num-unread">0</span></p>
+        <p>Num Genres: <span id="num-genres">0</span></p>
       </section>
     </header>
 
@@ -30,7 +30,7 @@
           >Select genre:
           <select name="select-genre" id="select-genre">
             <option value="">All</option>
-            <option value="non-fiction">Nonfiction</option>
+            <!-- <option value="non-fiction">Nonfiction</option> -->
           </select>
         </label>
         <button class="read-book-filter-btn">read</button>
@@ -39,22 +39,24 @@
     </section>
 
     <section class="book-grid">
-      <article class="book-card">
+      <!-- <article class="book-card">
         <section class="book-info">
           <h2>Title: Great Gatsby</h2>
           <p>Author: SomeAuthor</p>
           <p>Genre: Fiction</p>
+          <p>Pages:</p>
         </section>
 
         <div class="card-btn-container">
           <button class="toggle-read-btn">Read</button>
           <button class="remove-btn">Remove</button>
         </div>
-      </article>
+      </article> -->
     </section>
 
-    <div class="modal-overlay"></div>
-    <div class="form-modal">
+    <!-- Make it so fields are required and don't forget book duplication check -->
+    <div class="modal-overlay content-hidden"></div>
+    <div class="form-modal content-hidden">
       <form class="book-form">
         <h1>Enter a new book</h1>
         <fieldset>
@@ -63,29 +65,41 @@
             placeholder="Title"
             name="input-title"
             id="input-title"
+            required
           />
           <input
             type="text"
             placeholder="Author"
             name="input-author"
             id="input-author"
+            required
           />
           <input
             type="text"
             placeholder="Num Pages"
             name="input-pages"
             id="input-pages"
+            required
+          />
+          <input
+            type="text"
+            placeholder="Genre"
+            name="input-genre"
+            id="input-genre"
+            required
           />
           <label for="input-book-read"
             >Have you read it?
             <input
               type="checkbox"
-              value="read"
               name="input-book-read"
               id="input-book-read"
             />
           </label>
           <input type="submit" id="form-submit-btn" name="form-submit-btn" />
+
+          <!-- Type button to make the form know it's not a submit button -->
+          <button type="button" class="form-exit-btn">Exit</button>
         </fieldset>
       </form>
     </div>
