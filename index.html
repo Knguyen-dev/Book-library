@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <section class="website-info">
+        <h1>Library</h1>
+        <p>Welcome to library, by the same people who made cold pencils.</p>
+      </section>
+
+      <section class="library-info">
+        <p>Amount books:</p>
+        <p>Books read:</p>
+        <p>Books unread:</p>
+        <p>Num Genres:</p>
+      </section>
+    </header>
+
+    <section class="library-functions-section">
+      <button class="add-book-btn">Add Book</button>
+
+      <section class="book-filter-section">
+        <label for="select-genre"
+          >Select genre:
+          <select name="select-genre" id="select-genre">
+            <option value="">All</option>
+            <option value="non-fiction">Nonfiction</option>
+          </select>
+        </label>
+        <button class="read-book-filter-btn">read</button>
+        <button class="unread-book-filter-btn">unread</button>
+      </section>
+    </section>
+
+    <section class="book-grid">
+      <article class="book-card">
+        <section class="book-info">
+          <h2>Title: Great Gatsby</h2>
+          <p>Author: SomeAuthor</p>
+          <p>Genre: Fiction</p>
+        </section>
+
+        <div class="card-btn-container">
+          <button class="toggle-read-btn">Read</button>
+          <button class="remove-btn">Remove</button>
+        </div>
+      </article>
+    </section>
+
+    <div class="modal-overlay"></div>
+    <div class="form-modal">
+      <form class="book-form">
+        <h1>Enter a new book</h1>
+        <fieldset>
+          <input
+            type="text"
+            placeholder="Title"
+            name="input-title"
+            id="input-title"
+          />
+          <input
+            type="text"
+            placeholder="Author"
+            name="input-author"
+            id="input-author"
+          />
+          <input
+            type="text"
+            placeholder="Num Pages"
+            name="input-pages"
+            id="input-pages"
+          />
+          <label for="input-book-read"
+            >Have you read it?
+            <input
+              type="checkbox"
+              value="read"
+              name="input-book-read"
+              id="input-book-read"
+            />
+          </label>
+          <input type="submit" id="form-submit-btn" name="form-submit-btn" />
+        </fieldset>
+      </form>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
