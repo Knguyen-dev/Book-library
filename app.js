@@ -1,14 +1,4 @@
 /*
-- store all book objects in an array
-- add a function that takes input and stores new books into an array 
-- write function that loops through array and displays books on screen, each book can be it's own card
-- Have a new book button that prompts the form again and let's the user enter a new book; do the prevent default to solve the form issue
-- Add a button to each book's display to remove the book from the library; you need a way to associate the dom elements from book objects; a suggestion is using data attribute with the index 
-of the book in the library array
-- Add a button to change a book's read status; function that toggles the boolean variable on the Book prototype instance (means the single instance of book prototype/construcotr/class)
-- Add local storage so that you can persist the amount of books on screen
-- add a library log, to show the amount of books, the amount read and not read.
-- Add a filter by genre, now with drop down
 - add a dark mode
 - have some input validation, if the book is already in the library, then don't add it
 */
@@ -18,6 +8,7 @@ const numReadEl = document.getElementById("num-read");
 const numUnreadEl = document.getElementById("num-unread");
 const numGenresEl = document.getElementById("num-genres");
 
+const alertEl = document.querySelector(".alert-modal");
 const bookForm = document.querySelector(".book-form");
 const bookTitleEl = document.getElementById("input-title");
 const bookAuthorEl = document.getElementById("input-author");
@@ -32,12 +23,11 @@ const modalOverlay = document.querySelector(".modal-overlay");
 const bookGrid = document.querySelector(".book-grid");
 const genreDropSelect = document.getElementById("select-genre");
 const readFilterBtns = document.querySelectorAll(".filter-btn");
-let genresList = ["all"];
+
 let myLibrary = JSON.parse(localStorage.getItem("books"));
 if (!myLibrary) {
   myLibrary = [];
 }
-console.log(myLibrary);
 
 class Book {
   constructor(title, author, genre, numPages, is_read) {
@@ -53,17 +43,9 @@ class Book {
 function updateLibraryInfo() {
   let readCount = 0;
   let unreadCount = 0;
-
-  // When the books are changed, then the local storage will be changed
+  let genresList = ["all"];
   localStorage.setItem("books", JSON.stringify(myLibrary));
 
-  // When you add/remove a book, we must update the local storage
-  // Clear the genresList; genresList is only appended to
-  // so when we remove something, the genre will not be taken out of the list
-  // By resetting, the genresList can always be accurate. Always going to start and reset
-  // To "All" because selecting all genres will be an option, but the option "All" won't count as a genre such as fantasy
-  // If there are no genres we are still going to have 'all'
-  genresList = ["all"]; //note our genres should be lowercased
   // loop through all books to get genres, num read, and unread
   for (let i = 0; i < myLibrary.length; i++) {
     const currentBook = myLibrary[i];
@@ -176,9 +158,7 @@ function renderBooks() {
                 <p>Pages: ${book.numPages}</p>
               </section>
               <div class="card-btn-container">
-                <button class="toggle-read-btn">${
-                  book.is_read ? "Finished" : "Read"
-                }</button>
+                <button class="toggle-read-btn">${book.is_read ? "Finished" : "Read"}</button>
                 <button class="remove-btn">Remove</button>
               </div>
             </article>`;
@@ -228,6 +208,7 @@ bookForm.addEventListener("submit", addBookToLibrary);
 function hideForm() {
   formModal.classList.add("content-hidden");
   modalOverlay.classList.add("content-hidden");
+  clearForm();
 }
 
 function ShowForm() {
@@ -243,25 +224,56 @@ function clearForm() {
   bookReadEl.checked = false;
 }
 
+// Checks whether an entered title and author for a book has already been put into the library.
+// Returns true if the book is a duplicate, and false if it is a unique/new book
+function validateBook(title, author) {
+  let is_duplicate = false;
+  for (let i = 0; i < myLibrary.length; i++) {
+    const { title: currentTitle, author: currentAuthor } = myLibrary[i];
+    if (title === currentTitle && author === currentAuthor) {
+      is_duplicate = true;
+      break;
+    }
+  }
+  return is_duplicate;
+}
+
+//
+function displayAlert(message) {
+  alertEl.textContent = message;
+  alertEl.classList.remove("content-hidden");
+  setTimeout(() => {
+    alertEl.textContent = "";
+    alertEl.classList.add("content-hidden");
+  }, 7000);
+}
+
+// Gets data from form, if the form is not a duplicate then we are going to add
+// update the library's data and render the new books.
 function addBookToLibrary(e) {
   e.preventDefault();
-  hideForm();
   const title = bookTitleEl.value;
   const author = bookAuthorEl.value;
   const numPages = parseInt(numPagesEl.value);
   const genre = genreEl.value.toLowerCase();
   const is_read = bookReadEl.checked;
-  const newBook = new Book(title, author, genre, numPages, is_read);
-  myLibrary.push(newBook);
-  updateLibraryInfo();
-  renderBooks();
+
+  // If the book is not a duplicate
+  if (!validateBook(title, author)) {
+    const newBook = new Book(title, author, genre, numPages, is_read);
+    myLibrary.push(newBook);
+    updateLibraryInfo();
+    renderBooks();
+
+    displayAlert(`Successfully added '${title}' by ${author} `);
+  } else {
+    displayAlert(`Could not add '${title}' by ${author} since already in library`);
+  }
+
   clearForm();
 }
-// Main Eventlisteners section
 
 window.addEventListener("DOMContentLoaded", () => {
   updateLibraryInfo();
   renderBooks();
 });
-
-// Functions
