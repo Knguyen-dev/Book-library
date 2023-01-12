@@ -33,8 +33,8 @@
             <!-- <option value="non-fiction">Nonfiction</option> -->
           </select>
         </label>
-        <button class="read-book-filter-btn">read</button>
-        <button class="unread-book-filter-btn">unread</button>
+        <button class="filter-btn" data-id="read">read</button>
+        <button class="filter-btn" data-id="unread">unread</button>
       </section>
     </section>
 
@@ -65,36 +65,31 @@
             placeholder="Title"
             name="input-title"
             id="input-title"
-            required
-          />
+            required />
           <input
             type="text"
             placeholder="Author"
             name="input-author"
             id="input-author"
-            required
-          />
+            required />
           <input
             type="text"
             placeholder="Num Pages"
             name="input-pages"
             id="input-pages"
-            required
-          />
+            required />
           <input
             type="text"
             placeholder="Genre"
             name="input-genre"
             id="input-genre"
-            required
-          />
+            required />
           <label for="input-book-read"
             >Have you read it?
             <input
               type="checkbox"
               name="input-book-read"
-              id="input-book-read"
-            />
+              id="input-book-read" />
           </label>
           <input type="submit" id="form-submit-btn" name="form-submit-btn" />
 
