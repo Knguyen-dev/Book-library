@@ -32,9 +32,13 @@ const modalOverlay = document.querySelector(".modal-overlay");
 const bookGrid = document.querySelector(".book-grid");
 const genreDropSelect = document.getElementById("select-genre");
 const readFilterBtns = document.querySelectorAll(".filter-btn");
-let genresList = ["All"];
-let selectedGenre;
-let myLibrary = [];
+let genresList = ["all"];
+let myLibrary = JSON.parse(localStorage.getItem("books"));
+if (!myLibrary) {
+  myLibrary = [];
+}
+console.log(myLibrary);
+
 class Book {
   constructor(title, author, genre, numPages, is_read) {
     this.title = title;
@@ -45,111 +49,15 @@ class Book {
   }
 }
 
-// Work on filtering, by genre and by read/unread
-// I think it will filter for both everytime, regardless of it being genre or just read/unread
-// then filter will
-function filterBooks() {
-  let newLibrary = [];
-  let readStatus = "";
-
-  // Get the genre and read status
-  const genre = genreDropSelect.value;
-  readFilterBtns.forEach((btn) => {
-    if (btn.classList.contains("filter-btn-selected")) {
-      readStatus = btn.dataset.id;
-    }
-  });
-
-  // Filter read or unread books, if there is no filter then nothing will happen
-  // Regardless though, it must also be filtered by genre
-  if (readStatus == "read") {
-    newLibrary = myLibrary.filter((book) => {
-      if (book.is_read) {
-        return book;
-      }
-    });
-  } else if (readStatus == "unread") {
-    newLibrary = myLibrary.filter((book) => {
-      if (!book.is_read) {
-        return book;
-      }
-    });
-  } else {
-    //read and unread were not selected at all, which makes the variable an empty string
-    newLibrary = myLibrary;
-  }
-
-  // if 'all' wasn't selected, then a specific genre was selected, so we will filter our books
-  // Else if all was selected, then we won't filter any further
-  if (genre !== "all") {
-    // call function of rendering at this point
-    newLibrary = newLibrary.filter((book) => {
-      if (book.genre == genre) {
-        return book;
-      }
-    });
-  }
-  renderBooks(newLibrary);
-}
-
-function renderBooks(selectedBooks) {
-  // Turn all selected books into html and set them on the grid
-  // The ternary operator means if the book has already been read, put the text "finished", else put the text "read"
-  // on the button
-  const bookCardsHTML = selectedBooks
-    .map((book, index) => {
-      return `<article class="book-card" data-book-id="${index}">
-              <section class="book-info">
-                <h2>Title: ${book.title}</h2>
-                <p>Author: ${book.author}</p>
-                <p>Genre: ${book.genre}</p>
-                <p>Pages: ${book.numPages}</p>
-              </section>
-
-              <div class="card-btn-container">
-                <button class="toggle-read-btn">${
-                  book.is_read ? "Finished" : "Read"
-                }</button>
-                <button class="remove-btn">Remove</button>
-              </div>
-            </article>`;
-    })
-    .join("");
-  bookGrid.innerHTML = bookCardsHTML;
-
-  // Captured the button elements from DOM and are going to add event listeners to them
-  const toggleReadBtns = document.querySelectorAll(".toggle-read-btn");
-  const removeBookBtns = document.querySelectorAll(".remove-btn");
-  toggleReadBtns.forEach((btn) => {
-    btn.addEventListener("click", toggleRead);
-  });
-  removeBookBtns.forEach((btn) => {
-    btn.addEventListener("click", removeBook);
-  });
-}
-
-function toggleRead(e) {}
-function removeBook(e) {}
-
-function hideForm() {
-  formModal.classList.add("content-hidden");
-  modalOverlay.classList.add("content-hidden");
-}
-function ShowForm() {
-  formModal.classList.remove("content-hidden");
-  modalOverlay.classList.remove("content-hidden");
-}
-function clearForm() {
-  bookTitleEl.value = "";
-  bookAuthorEl.value = "";
-  numPagesEl.value = null;
-  genreEl.value = "";
-  bookReadEl.checked = false;
-  console.log("Clear form triggered");
-}
+// Updating and filtering section
 function updateLibraryInfo() {
   let readCount = 0;
   let unreadCount = 0;
+
+  // When the books are changed, then the local storage will be changed
+  localStorage.setItem("books", JSON.stringify(myLibrary));
+
+  // When you add/remove a book, we must update the local storage
   // Clear the genresList; genresList is only appended to
   // so when we remove something, the genre will not be taken out of the list
   // By resetting, the genresList can always be accurate. Always going to start and reset
@@ -181,30 +89,55 @@ function updateLibraryInfo() {
     .join("");
 }
 
-function addBookToLibrary(e) {
-  e.preventDefault();
-  hideForm();
-  const title = bookTitleEl.value;
-  const author = bookAuthorEl.value;
-  const numPages = parseInt(numPagesEl.value);
-  const genre = genreEl.value.toLowerCase();
-  const is_read = bookReadEl.checked;
-  const newBook = new Book(title, author, genre, numPages, is_read);
-  myLibrary.push(newBook);
-  // Don't forget to clear form after
-  updateLibraryInfo();
-  // renderBooks();
-  clearForm();
+function filterBooks() {
+  let newLibrary = [];
+  let readStatus = "";
+  // Get the genre and read status
+
+  const genre = genreDropSelect.value;
+  readFilterBtns.forEach((btn) => {
+    if (btn.classList.contains("filter-btn-selected")) {
+      readStatus = btn.dataset.id;
+    }
+  });
+  // Filter read or unread books, if there is no filter then nothing will happen
+  // Regardless though, it must also be filtered by genre
+
+  if (readStatus == "read") {
+    newLibrary = myLibrary.filter((book) => {
+      if (book.is_read) {
+        return book;
+      }
+    });
+  } else if (readStatus == "unread") {
+    newLibrary = myLibrary.filter((book) => {
+      if (!book.is_read) {
+        return book;
+      }
+    });
+  } else {
+    //read and unread were not selected at all, which makes the variable an empty string
+    newLibrary = myLibrary;
+  }
+
+  // if 'all' wasn't selected, then a specific genre was selected, so we will filter our books
+  // Else if all was selected, then we won't filter any further
+  if (genre !== "all") {
+    // call function of rendering at this point
+    newLibrary = newLibrary.filter((book) => {
+      if (book.genre == genre) {
+        return book;
+      }
+    });
+  }
+
+  return newLibrary;
 }
 
-exitFormBtn.addEventListener("click", hideForm);
-addBookBtn.addEventListener("click", ShowForm);
-bookForm.addEventListener("submit", addBookToLibrary);
-genreDropSelect.addEventListener("change", filterBooks);
+genreDropSelect.addEventListener("change", renderBooks);
 readFilterBtns.forEach((btn) => {
   btn.addEventListener("click", (e) => {
     const btnID = e.currentTarget.dataset.id;
-
     // Iterate over the buttons again
     readFilterBtns.forEach((item) => {
       // If the button ID is equal to the id of the button clicked, then select it, else deselect it
@@ -219,35 +152,116 @@ readFilterBtns.forEach((btn) => {
         item.classList.remove("filter-btn-selected");
       }
     });
-
     // The last thing for the event listener is to call the filter books function
-    filterBooks();
+    renderBooks();
   });
 });
 
-function fillTestingData() {
-  myLibrary.push(
-    new Book("The things they carried", "Tim Johnson", "nonfiction", 200, true)
-  );
-  myLibrary.push(
-    new Book("The 1862", "Orville Redenbacher", "fiction", 380, true)
-  );
-  myLibrary.push(
-    new Book(
-      "Outliers: A Story of Success",
-      "Malcom Gladwell",
-      "nonfiction",
-      190,
-      true
-    )
-  );
-  myLibrary.push(new Book("Galaxy", "Mia Star", "fantasy", 180, false));
-  myLibrary.push(new Book("Spiral", "John Mito", "fiction", 130, false));
-  myLibrary.push(
-    new Book("War on Peace", "Moores John", "nonfiction", 120, false)
-  );
-  myLibrary.push(new Book("Graliz", "Rick Kite", "fiction", 130, true));
-  myLibrary.push(new Book("Red styles", "Mio Scaron", "fantasy", 300, true));
-  updateLibraryInfo();
+// Rendering Section
+function renderBooks() {
+  // Turn all selected books into html and set them on the grid
+  // The ternary operator means if the book has already been read, put the text "finished", else put the text "read"
+  // on the button
+
+  const selectedBooks = filterBooks();
+  const bookCardsHTML = selectedBooks
+    .map((book) => {
+      //get the index of the book in the myLibrary array,
+      const index = myLibrary.indexOf(book);
+      return `<article class="book-card" data-book-id="${index}">
+              <section class="book-info">
+                <h2>Title: ${book.title}</h2>
+                <p>Author: ${book.author}</p>
+                <p>Genre: ${book.genre}</p>
+                <p>Pages: ${book.numPages}</p>
+              </section>
+              <div class="card-btn-container">
+                <button class="toggle-read-btn">${
+                  book.is_read ? "Finished" : "Read"
+                }</button>
+                <button class="remove-btn">Remove</button>
+              </div>
+            </article>`;
+    })
+    .join("");
+  bookGrid.innerHTML = bookCardsHTML;
+
+  // Captured the button elements from DOM and are going to add event listeners to them
+  const toggleReadBtns = document.querySelectorAll(".toggle-read-btn");
+  const removeBookBtns = document.querySelectorAll(".remove-btn");
+  toggleReadBtns.forEach((btn) => {
+    btn.addEventListener("click", toggleRead);
+  });
+  removeBookBtns.forEach((btn) => {
+    btn.addEventListener("click", removeBook);
+  });
 }
-fillTestingData();
+
+// Gets the bookcard, from the event target, which was the book card's button
+function toggleRead(e) {
+  const bookIndex = e.currentTarget.parentElement.parentElement.dataset.bookId;
+  // Okay we want to change the read status, in myLibrary and change it on the button was well
+  if (myLibrary[bookIndex].is_read) {
+    myLibrary[bookIndex].is_read = false;
+    e.currentTarget.textContent = "Read";
+  } else {
+    myLibrary[bookIndex].is_read = true;
+    e.currentTarget.textContent = "Finished";
+  }
+}
+function removeBook(e) {
+  const bookIndex = e.currentTarget.parentElement.parentElement.dataset.bookId;
+  // Remove the book from the original or main library
+  // Then call the function to update the log or library info that's displayed
+  // Because the books have changed, call a function that filters the books again
+  // and then the function calls the rendering function
+  myLibrary.splice(bookIndex, 1);
+  updateLibraryInfo();
+  renderBooks();
+}
+
+// Form or adding books section
+exitFormBtn.addEventListener("click", hideForm);
+addBookBtn.addEventListener("click", ShowForm);
+bookForm.addEventListener("submit", addBookToLibrary);
+
+function hideForm() {
+  formModal.classList.add("content-hidden");
+  modalOverlay.classList.add("content-hidden");
+}
+
+function ShowForm() {
+  formModal.classList.remove("content-hidden");
+  modalOverlay.classList.remove("content-hidden");
+}
+
+function clearForm() {
+  bookTitleEl.value = "";
+  bookAuthorEl.value = "";
+  numPagesEl.value = null;
+  genreEl.value = "";
+  bookReadEl.checked = false;
+}
+
+function addBookToLibrary(e) {
+  e.preventDefault();
+  hideForm();
+  const title = bookTitleEl.value;
+  const author = bookAuthorEl.value;
+  const numPages = parseInt(numPagesEl.value);
+  const genre = genreEl.value.toLowerCase();
+  const is_read = bookReadEl.checked;
+  const newBook = new Book(title, author, genre, numPages, is_read);
+  myLibrary.push(newBook);
+  updateLibraryInfo();
+  renderBooks();
+  clearForm();
+}
+// Main Eventlisteners section
+
+window.addEventListener("DOMContentLoaded", () => {
+  updateLibraryInfo();
+  renderBooks();
+});
+
+// Functions
