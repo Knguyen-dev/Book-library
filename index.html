@@ -8,12 +8,15 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <!-- header -->
     <header>
+      <!-- Website info section -->
       <section class="website-info">
         <h1>Library</h1>
         <p>Welcome to library, by the same people who made cold pencils.</p>
       </section>
 
+      <!-- Library info section -->
       <section class="library-info">
         <p>Amount books: <span id="num-books">0</span></p>
         <p>Books read: <span id="num-read">0</span></p>
@@ -22,15 +25,16 @@
       </section>
     </header>
 
+    <!-- Library function section, which has add book button, and a section for filter buttons -->
     <section class="library-functions-section">
       <button class="add-book-btn">Add Book</button>
 
+      <!-- Filter buttons sections that has select drop-down and two filter buttons  -->
       <section class="book-filter-section">
         <label for="select-genre"
           >Select genre:
           <select name="select-genre" id="select-genre">
-            <option value="all">all</option>
-            <!-- <option value="non-fiction">Nonfiction</option> -->
+            <!-- <option value="all">all</option> -->
           </select>
         </label>
         <button class="filter-btn" data-id="read">read</button>
@@ -38,8 +42,11 @@
       </section>
     </section>
 
+    <!-- Book grid section -->
     <section class="book-grid">
-      <!-- <article class="book-card">
+      <!-- Example of what an individual 'book card' looks like -->
+      <!-- Book card has book-info section, and a container for the buttons -->
+      <!-- <article class="book-card" data-id="0">
         <section class="book-info">
           <h2>Title: Great Gatsby</h2>
           <p>Author: SomeAuthor</p>
@@ -54,43 +61,27 @@
       </article> -->
     </section>
 
-    <!-- Make it so fields are required and don't forget book duplication check -->
+    <!-- Modal overlay -->
     <div class="modal-overlay content-hidden"></div>
+
+    <!-- Alert modal or div that shows the displays the text for the alert -->
     <div class="alert-modal content-hidden">Sample alert text</div>
-    <div class="form-modal content-hidden">
+
+    <!-- Form container section -->
+    <div class="form-container content-hidden">
+      <!-- Book form -->
       <form class="book-form">
         <h1>Enter a new book</h1>
+
+        <!-- input section -->
         <fieldset>
-          <input
-            type="text"
-            placeholder="Title"
-            name="input-title"
-            id="input-title"
-            required />
-          <input
-            type="text"
-            placeholder="Author"
-            name="input-author"
-            id="input-author"
-            required />
-          <input
-            type="text"
-            placeholder="Num Pages"
-            name="input-pages"
-            id="input-pages"
-            required />
-          <input
-            type="text"
-            placeholder="Genre"
-            name="input-genre"
-            id="input-genre"
-            required />
+          <input type="text" placeholder="Title" name="input-title" id="input-title" required />
+          <input type="text" placeholder="Author" name="input-author" id="input-author" required />
+          <input type="text" placeholder="Num Pages" name="input-pages" id="input-pages" required />
+          <input type="text" placeholder="Genre" name="input-genre" id="input-genre" required />
           <label for="input-book-read"
             >Have you read it?
-            <input
-              type="checkbox"
-              name="input-book-read"
-              id="input-book-read" />
+            <input type="checkbox" name="input-book-read" id="input-book-read" />
           </label>
           <input type="submit" id="form-submit-btn" name="form-submit-btn" />
 
