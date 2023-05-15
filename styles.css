@@ -227,6 +227,8 @@ label {
   margin-top: 4px;
   margin-bottom: 4px;
 }
+
+/* Container for the buttons on the book card */
 .card-btn-container {
   width: 70%;
   display: flex;
@@ -238,7 +240,12 @@ label {
   border: 2px solid var(--clr-black);
   background: lemonchiffon;
 }
+.card-btn-container button:hover,
+.toggle-read-btn[data-is-read="true"] {	
+	background: black;
+	color: lemonchiffon;
+} 
 
-.card-btn-container button.btn-book-unread {
-  background: var(--clr-primary-4);
-}
+
+
+

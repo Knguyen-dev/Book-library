@@ -209,7 +209,8 @@ function renderBooks() {
                 <p>Pages: ${book.numPages}</p>
               </section>
               <div class="card-btn-container">
-                <button class="toggle-read-btn">${book.is_read ? "Finished" : "Read"}</button>
+
+			  	<button class="toggle-read-btn" data-is-read="${book.is_read ? "true" : "false"}">${book.is_read ? "Finished" : "Read"}</button>
                 <button class="remove-btn">Remove</button>
               </div>
             </article>`;
@@ -233,14 +234,20 @@ function renderBooks() {
 // Alters the is_read boolean on the book object, and visually show the alteration on book card buttons
 function toggleRead(e) {
   const bookIndex = e.currentTarget.parentElement.parentElement.dataset.bookId; // Gets the bookcard, from the event target, which was the book card's button
+  const currentToggleBtn = e.currentTarget;
+ 
   // Okay we want to change the read status, in myLibrary and change it on the button was well
+  // Then change the data attribute's value, which in turn will affect how the button apperas in the css
   if (myLibrary[bookIndex].is_read) {
     myLibrary[bookIndex].is_read = false;
-    e.currentTarget.textContent = "Read";
+    currentToggleBtn.textContent = "Read";
+	currentToggleBtn.setAttribute("data-is-read", "false");
   } else {
     myLibrary[bookIndex].is_read = true;
-    e.currentTarget.textContent = "Finished";
+    currentToggleBtn.textContent = "Finished";
+	currentToggleBtn.setAttribute("data-is-read", "true");
   }
+  updateLibraryInfo();
 }
 
 // Removes the book from the library, update library info such as num books, number of genres on the drop down, and then render the new books
