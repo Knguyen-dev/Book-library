@@ -161,6 +161,11 @@ function filterBooks() {
   return newLibrary;
 }
 
+
+/*
+ + Section for rendering books and handling changes on the book cards; more visual portion
+ */
+
 // For the select HTML element, when they change the value, then we will render with that selected genre in mind
 genreDropSelect.addEventListener("change", renderBooks);
 
@@ -173,15 +178,10 @@ readFilterBtns.forEach((btn) => {
     readFilterBtns.forEach((item) => {
       // If the button ID is equal to the id of the button clicked, then select it.
       if (item.dataset.id == btnID) {
-        // if the button is not already selected then select it, else the user is clicking on a selected button to deselect it
-        if (!item.classList.contains("filter-btn-selected")) {
-          item.classList.add("filter-btn-selected");
-        } else {
-          // Means user already had this button selected, so by clicking on it again they want to deselect it
-          item.classList.remove("filter-btn-selected");
-        }
+        // if the button is not already selected then select it, else the user is clicking on a selected button to deselect it so we remove "filter-btn-selected"
+		item.classList.toggle("filter-btn-selected");
       } else {
-        //else for all other buttons that don't match the clicked id we will deselect them visually
+        // Else visually deselect from all other buttons since they aren't the one the user is trying to select/deselect
         item.classList.remove("filter-btn-selected");
       }
     });
@@ -189,10 +189,6 @@ readFilterBtns.forEach((btn) => {
     renderBooks();
   });
 });
-
-/*
- + Section for rendering books and handling changes on the book cards
- */
 
 //  Gets and displays the desired books on the screen
 function renderBooks() {
@@ -237,7 +233,7 @@ function toggleRead(e) {
   const currentToggleBtn = e.currentTarget;
  
   // Okay we want to change the read status, in myLibrary and change it on the button was well
-  // Then change the data attribute's value, which in turn will affect how the button apperas in the css
+  // Then change the data attribute's value, which in turn will affect how the button appear in the css
   if (myLibrary[bookIndex].is_read) {
     myLibrary[bookIndex].is_read = false;
     currentToggleBtn.textContent = "Read";
